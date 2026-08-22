@@ -1,0 +1,8 @@
+Task 5: Unit testing result
+
+$ uv run --with pytest --with flask pytest -q
+
+......                                                                   [100%]
+6 passed in 0.75s
+
+Result: All unit tests passed successfully.
