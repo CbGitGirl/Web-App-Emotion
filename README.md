@@ -11,6 +11,8 @@ anger, disgust, fear, joy, and sadness, plus the dominant emotion.
 - `2b_application_creation.txt` — import and test terminal transcript for the rubric
 - `3a_output_formatting.py` — rubric-named output-formatting submission
 - `3b_formatted_output_test.txt` — rubric-named formatted-output terminal transcript
+- `EmotionDetection/` — importable application package
+- `4b_packaging_test.txt` — rubric-named package-validation terminal transcript
 - `server.py` — Flask API
 - `test_emotion_detection.py` — unit and route tests
 - `requirements.txt` — Python dependencies
