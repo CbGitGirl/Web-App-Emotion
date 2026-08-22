@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import sys
 from pathlib import Path
-from types import SimpleNamespace
 
 import pytest
 
@@ -23,19 +22,34 @@ EMOTIONS = {
 }
 
 
-class FakeModel:
-    def run(self, text: str):
-        assert text == "I am delighted by this result."
+class FakeResponse:
+    def raise_for_status(self):
+        return None
+
+    def json(self):
         return {"emotion_prediction": {"emotion": EMOTIONS}}
 
 
 def test_emotion_detector_returns_scores_and_dominant_emotion(monkeypatch):
-    fake_watson = SimpleNamespace(load=lambda model_name: FakeModel())
-    monkeypatch.setattr(emotion_detection, "watson_nlp", fake_watson)
+    calls = {}
+
+    def fake_post(url, headers, json, timeout):
+        calls.update(url=url, headers=headers, json=json, timeout=timeout)
+        return FakeResponse()
+
+    monkeypatch.setattr(emotion_detection.requests, "post", fake_post)
 
     result = emotion_detection.emotion_detector("I am delighted by this result.")
 
     assert result == {**EMOTIONS, "dominant_emotion": "joy"}
+    assert calls["url"] == emotion_detection.WATSON_NLP_URL
+    assert calls["headers"] == {
+        "grpc-metadata-mm-model-id": emotion_detection.MODEL_NAME
+    }
+    assert calls["json"] == {
+        "raw_document": {"text": "I am delighted by this result."}
+    }
+    assert calls["timeout"] == 30
 
 
 @pytest.mark.parametrize("value", [None, "", "   "])
