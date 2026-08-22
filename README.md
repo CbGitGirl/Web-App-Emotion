@@ -14,6 +14,7 @@ anger, disgust, fear, joy, and sadness, plus the dominant emotion.
 - `EmotionDetection/` — importable application package
 - `4b_packaging_test.txt` — rubric-named package-validation terminal transcript
 - `5a_unit_testing.py` — rubric-named unit-test submission
+- `5b_unit_testing_result.txt` — rubric-named all-tests-passed transcript
 - `server.py` — Flask API
 - `test_emotion_detection.py` — unit and route tests
 - `requirements.txt` — Python dependencies
@@ -33,6 +34,21 @@ python -m pip install -r requirements.txt
 If the course environment provides the model separately, install or register
 `emotion_aggregated-workflow_lang_en_stock` there before starting the server.
 The application does not silently substitute another emotion detector.
+
+
+### Replit validation boundary
+
+The live model check cannot be completed in this Replit workspace: its managed
+Python site-packages are read-only, `watson-nlp==4.8.0` is not available from
+the accessible package registry, and the hosted Skills Network emotion service
+is unreachable from this network. The local server has been verified to return
+an explicit HTTP 503 in that condition. The `2b_application_creation.txt` and
+`3b_formatted_output_test.txt` transcripts use a Watson-compatible fake model
+only; they are deterministic formatting checks, not live inference evidence.
+
+Capture the five real scores and `dominant_emotion` by repeating the run steps
+in the course Watson runtime with the model installed. This remaining evidence
+is tracked as follow-up task #1103.
 
 ## Run
 
@@ -77,3 +93,11 @@ For the static-analysis submission, run:
 ```bash
 python -m pylint server.py emotion_detection.py
 ```
+
+### Local validation recorded in Replit
+
+Using a temporary writable Python environment, `pytest -q` completed with
+`6 passed` and `python -m pylint server.py emotion_detection.py` rated the code
+at `10.00/10`. The exact requirements installation remained blocked at
+`watson-nlp==4.8.0`; a real-sentence call to the locally started server
+therefore returned the documented HTTP 503 rather than fabricated scores.
