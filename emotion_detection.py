@@ -5,11 +5,15 @@ from __future__ import annotations
 from typing import Any
 
 try:
-    import watson_nlp
-except ImportError:  # pragma: no cover - exercised only without the optional runtime
-    watson_nlp = None
+    import requests
+except ImportError:  # pragma: no cover - dependency is listed in requirements.txt
+    requests = None
 
 
+WATSON_NLP_URL = (
+    "https://sn-watson-emotion.labs.skills.network/"
+    "v1/watson.runtime.nlp.v1/NlpService/EmotionPredict"
+)
 MODEL_NAME = "emotion_aggregated-workflow_lang_en_stock"
 EMOTION_NAMES = ("anger", "disgust", "fear", "joy", "sadness")
 
@@ -22,22 +26,30 @@ def _empty_result() -> dict[str, Any]:
 def emotion_detector(text_to_analyze: str | None) -> dict[str, Any]:
     """Detect the five Watson NLP emotions and their dominant emotion.
 
-    Watson NLP is loaded lazily so importing the module remains safe for tools
-    and tests when the model runtime is not installed. A missing or blank
-    string is invalid and never reaches the model.
+    A missing or blank string is invalid and never reaches the model. Valid
+    input is sent to the course Watson NLP service using its documented model
+    header and JSON request body.
     """
     if not isinstance(text_to_analyze, str) or not text_to_analyze.strip():
         return _empty_result()
 
-    if watson_nlp is None:
+    if requests is None:
         raise RuntimeError(
-            "Watson NLP is not installed. Install requirements.txt and the "
-            "Watson NLP emotion model before running detection."
+            "The requests package is not installed. Install requirements.txt "
+            "before running detection."
         )
 
-    model = watson_nlp.load(MODEL_NAME)
-    response = model.run(text_to_analyze)
-    emotion_scores = response["emotion_prediction"]["emotion"]
+    try:
+        response = requests.post(
+            WATSON_NLP_URL,
+            headers={"grpc-metadata-mm-model-id": MODEL_NAME},
+            json={"raw_document": {"text": text_to_analyze}},
+            timeout=30,
+        )
+        response.raise_for_status()
+        emotion_scores = response.json()["emotion_prediction"]["emotion"]
+    except (requests.RequestException, KeyError, TypeError, ValueError) as error:
+        raise RuntimeError(f"Watson NLP request failed: {error}") from error
 
     result = {name: emotion_scores[name] for name in EMOTION_NAMES}
     result["dominant_emotion"] = max(
