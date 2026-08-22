@@ -20,7 +20,7 @@ def emotion_detector_route():
     """Detect emotions for the course-compatible query parameter."""
     text_to_analyze = request.args.get("textToAnalyze")
     if not isinstance(text_to_analyze, str) or not text_to_analyze.strip():
-        return jsonify({"error": "textToAnalyze must be a non-empty string"}), 400
+        return "Invalid text! Please try again!", 400
 
     try:
         result = emotion_detector(text_to_analyze)
