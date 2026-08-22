@@ -1,0 +1,39 @@
+Task 2: Application creation and import test
+
+$ python3 -m py_compile emotion_detection.py 2a_emotion_detection.py server.py
+
+$ python3 - <<'PY'
+import importlib.util
+from pathlib import Path
+from types import SimpleNamespace
+
+for filename in ("emotion_detection.py", "2a_emotion_detection.py"):
+    path = Path(filename)
+    spec = importlib.util.spec_from_file_location(filename[:-3], path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+
+    scores = {
+        "anger": 0.01,
+        "disgust": 0.02,
+        "fear": 0.03,
+        "joy": 0.91,
+        "sadness": 0.04,
+    }
+
+    class Model:
+        def run(self, text):
+            return {"emotion_prediction": {"emotion": scores}}
+
+    module.watson_nlp = SimpleNamespace(load=lambda name: Model())
+    assert module.emotion_detector("hello")["dominant_emotion"] == "joy"
+    assert module.emotion_detector(" ")["dominant_emotion"] is None
+
+print("both Watson-compatible detector copies passed smoke checks")
+PY
+
+both Watson-compatible detector copies passed smoke checks
+
+Result: The application modules imported and tested without errors.
+Note: The smoke test uses a Watson-compatible test model because the live
+Watson NLP runtime/model is available only in the course environment.
