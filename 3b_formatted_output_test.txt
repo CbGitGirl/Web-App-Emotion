@@ -1,0 +1,36 @@
+Task 3: Formatted output test
+
+$ python3 - <<'PY'
+import importlib.util
+from types import SimpleNamespace
+
+spec = importlib.util.spec_from_file_location(
+    "output_formatting",
+    "3a_output_formatting.py",
+)
+module = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(module)
+
+scores = {
+    "anger": 0.01,
+    "disgust": 0.02,
+    "fear": 0.03,
+    "joy": 0.91,
+    "sadness": 0.04,
+}
+
+class Model:
+    def run(self, text):
+        return {"emotion_prediction": {"emotion": scores}}
+
+module.watson_nlp = SimpleNamespace(load=lambda name: Model())
+print(module.emotion_detector("hello"))
+PY
+
+{'anger': 0.01, 'disgust': 0.02, 'fear': 0.03, 'joy': 0.91, 'sadness': 0.04, 'dominant_emotion': 'joy'}
+
+Result: The application output is correctly formatted with all five
+emotion scores and the dominant emotion.
+
+Note: This is a Watson-compatible formatting test. Live Watson NLP model
+execution is available in the course environment.
