@@ -7,6 +7,7 @@ anger, disgust, fear, joy, and sadness, plus the dominant emotion.
 ## Files
 
 - `emotion_detection.py` — Watson NLP model wrapper and stable response shape
+- `2a_emotion_detection.py` — rubric-named submission copy of the detector function
 - `server.py` — Flask API
 - `test_emotion_detection.py` — unit and route tests
 - `requirements.txt` — Python dependencies
