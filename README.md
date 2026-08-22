@@ -20,6 +20,8 @@ anger, disgust, fear, joy, and sadness, plus the dominant emotion.
 - `7a_error_handling_function.py` — rubric-named error-handling submission
 - `7b_error_handling_server.py` — rubric-named Flask blank-input handling submission
 - `7c_error_handling_interface.png` — rubric-named error-handling evidence image
+- `8a_server_modified.py` — rubric-named static-analysis server submission
+- `8b_static_code_analysis.txt` — rubric-named perfect-score analysis transcript
 - `server.py` — Flask API
 - `test_emotion_detection.py` — unit and route tests
 - `requirements.txt` — Python dependencies
