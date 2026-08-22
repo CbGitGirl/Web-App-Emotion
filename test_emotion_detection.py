@@ -56,7 +56,7 @@ def test_route_rejects_missing_text():
     response = client.get("/emotionDetector")
 
     assert response.status_code == 400
-    assert response.get_json()["error"]
+    assert response.get_data(as_text=True) == "Invalid text! Please try again!"
 
 
 def test_route_returns_json(monkeypatch):
