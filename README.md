@@ -64,3 +64,9 @@ testing and do not download a model:
 ```bash
 pytest -q
 ```
+
+For the static-analysis submission, run:
+
+```bash
+python -m pylint server.py emotion_detection.py
+```
