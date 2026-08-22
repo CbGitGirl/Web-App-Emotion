@@ -1,0 +1,10 @@
+Task 8: Static code analysis result
+
+$ uv run --with pylint --with flask pylint server.py emotion_detection.py
+
+warning: No `requires-python` value found in the workspace. Defaulting to `>=3.11`.
+
+--------------------------------------------------------------------
+Your code has been rated at 10.00/10 (previous run: 10.00/10, +0.00)
+
+Result: Static code analysis completed successfully with a perfect score.
