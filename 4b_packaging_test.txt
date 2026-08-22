@@ -1,0 +1,7 @@
+Task 4: EmotionDetection package test
+
+$ python3 -c "from EmotionDetection import emotion_detector; print('EmotionDetection is a valid package')"
+
+EmotionDetection is a valid package
+
+Result: The EmotionDetection package was imported successfully without errors.
