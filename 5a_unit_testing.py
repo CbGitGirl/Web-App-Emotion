@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import sys
 from pathlib import Path
-from types import SimpleNamespace
 
 import pytest
 
@@ -23,18 +22,23 @@ EMOTIONS = {
 }
 
 
-class FakeModel:
-    """Small Watson-compatible model used for deterministic testing."""
+class FakeResponse:
+    """Small Watson-compatible HTTP response used for deterministic testing."""
 
-    def run(self, text: str):
-        assert text == "I am delighted by this result."
+    def raise_for_status(self):
+        return None
+
+    def json(self):
         return {"emotion_prediction": {"emotion": EMOTIONS}}
 
 
 def test_emotion_detector_returns_scores_and_dominant_emotion(monkeypatch):
     """The detector returns all scores and identifies joy as dominant."""
-    fake_watson = SimpleNamespace(load=lambda model_name: FakeModel())
-    monkeypatch.setattr(emotion_detection, "watson_nlp", fake_watson)
+    monkeypatch.setattr(
+        emotion_detection.requests,
+        "post",
+        lambda *args, **kwargs: FakeResponse(),
+    )
 
     result = emotion_detection.emotion_detector("I am delighted by this result.")
 
