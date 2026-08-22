@@ -10,6 +10,7 @@ anger, disgust, fear, joy, and sadness, plus the dominant emotion.
 - `2a_emotion_detection.py` — rubric-named submission copy of the detector function
 - `2b_application_creation.txt` — import and test terminal transcript for the rubric
 - `3a_output_formatting.py` — rubric-named output-formatting submission
+- `3b_formatted_output_test.txt` — rubric-named formatted-output terminal transcript
 - `server.py` — Flask API
 - `test_emotion_detection.py` — unit and route tests
 - `requirements.txt` — Python dependencies
